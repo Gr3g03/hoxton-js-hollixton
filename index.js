@@ -1,6 +1,7 @@
 const state = {
     store : [],
     users : [],
+    pages : ''
 }
 
 
@@ -69,10 +70,7 @@ function renderHeader(){
     headerUlEl.append(headerH1El, girlsHeaderLiEl, guysHeaderLiEl, saleHeaderLiEl)
     headerNavEl.append( headerUlEl)
 
-    // const leftHaderSectionEl =document.createElement('section')
-    // leftHaderSectionEl.textContent = 'sale'
-    // const leftHeaderUlEl = document.createElement('ul')
-    // const leftHeaderLiEl = document.createElement('li')
+
 
     const rightHeaderSectionEl =  document.createElement('section')
     rightHeaderSectionEl.setAttribute('class', 'right-HeaderNavEL')
@@ -82,24 +80,28 @@ function renderHeader(){
 
     const searchLiEL =  document.createElement('li')
     searchLiEL.setAttribute ('class', 'right-Header-list-item')
-    const searchAEL = document.createElement('a')
-    searchAEL.setAttribute('href' ,'null')
-    searchAEL.textContent = 'search'
-    searchLiEL.append(searchAEL)
+    const searbuttonhAEL = document.createElement('button')
+    const searchimgEL = document.createElement('img')
+    searchimgEL.setAttribute('src', './assets/search.svg')
+    searbuttonhAEL.append(searchimgEL)
+    searchLiEL.append(searbuttonhAEL)
 
     const loginLiEl =  document.createElement('li')
     loginLiEl.setAttribute ('class', 'right-Header-list-item')
-    const loginALiEl = document.createElement('a')
-    loginALiEl.setAttribute('href' ,'null')
-    loginALiEl.textContent = 'login'
-    loginLiEl.append(loginALiEl)
+    const loginButtonEl = document.createElement('button')
+    const loginimgEL = document.createElement('img')
+    loginimgEL.setAttribute('src', './assets/login_person.svg')
+
+    loginButtonEl.append(loginimgEL)
+    loginLiEl.append(loginButtonEl)
 
     const cartLiEl =  document.createElement('li')
     cartLiEl.setAttribute ('class', 'right-Header-list-item')
-    const cartALiEl = document.createElement('a')
-    cartALiEl.setAttribute('href' ,'null')
-    cartALiEl.textContent = 'cart'
-    cartLiEl.append(cartALiEl)
+    const cartButtonEl = document.createElement('button')
+    const cartimgEL = document.createElement('img')
+    cartimgEL.setAttribute('src', './assets/cart.svg')
+    cartButtonEl.append(cartimgEL)
+    cartLiEl.append(cartButtonEl)
 
     rightHeaderrUlEl.append(searchLiEL,loginLiEl,cartLiEl )
     rightHeaderSectionEl.append(rightHeaderrUlEl)
@@ -117,6 +119,7 @@ function renderMain(){
 
     const mainH2El = document.createElement('h2')
     mainH2El.textContent = 'Home'
+    mainH2El.style.color = 'white'
 
     const mainSectionEl = document.createElement('section')
     mainSectionEl.setAttribute('class', 'product-box')
@@ -125,7 +128,10 @@ function renderMain(){
     const divContainerEl = document.createElement('div')
     divContainerEl.setAttribute('class', 'products-container')
     
-    
+    const aMainEl = document.createElement('a')
+    aMainEl.setAttribute('class', 'main-link')
+    aMainEl.setAttribute('href', '#')
+
     const mainImgEl = document.createElement('img')
     mainImgEl.setAttribute('class', 'product-img')
     mainImgEl.setAttribute('src', items.image)
@@ -163,8 +169,8 @@ function renderMain(){
 }
     
 
-   
-    divContainerEl.append(mainImgEl,mainH3El,spanEL )
+    aMainEl.append( mainImgEl,mainH3El )
+    divContainerEl.append( aMainEl,spanEL )
     mainSectionEl.append(divContainerEl)
 }
     mainEl.append( mainH2El ,mainSectionEl )
