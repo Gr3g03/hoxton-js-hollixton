@@ -83,10 +83,13 @@ function renderHeader(){
     headerEL.append(headerNavEl,rightHeaderSectionEl )
     document.body.append(headerEL)
 
+    headerEL.innerhtml = ''
+
     
 }
 
 function renderMain(){
+   
     const mainEl = document.createElement('main')
 
     const mainH2El = document.createElement('h2')
@@ -95,29 +98,40 @@ function renderMain(){
     const mainSectionEl = document.createElement('section')
     mainSectionEl.setAttribute('class', 'product-box')
 
+    for(const items of state.store){
     const divContainerEl = document.createElement('div')
     divContainerEl.setAttribute('class', 'products-container')
-
+    
+    
     const mainImgEl = document.createElement('img')
     mainImgEl.setAttribute('class', 'product-img')
-    mainImgEl.setAttribute('src', '#')
+    mainImgEl.setAttribute('src', items.image)
     mainImgEl.setAttribute('alt', 'product')
 
     const mainH3El = document.createElement('h3')
     mainH3El.setAttribute('class', 'product-name')
-    mainH3El.textContent= 'Product Name'
+    mainH3El.textContent =  items.name
+
     const mainH4El = document.createElement('h4')
     mainH4El.setAttribute('class','product-price')
-    mainH4El.textContent = 'price'
-  
+    mainH4El.textContent = items.price
+
+   
     divContainerEl.append(mainImgEl,mainH3El,mainH4El )
     mainSectionEl.append(divContainerEl)
-
-    
+}
     mainEl.append( mainH2El ,mainSectionEl )
     document.body.append(mainEl)
 
+    
 }
+
+
+
+
+
+
+
 
 function renderFoter() {
     const footerEl = document.createElement('footer')
@@ -137,16 +151,22 @@ function renderFoter() {
 function render(){
 
     document.body.innerhtml = ''
+   
 
      renderHeader ()
-     renderMain()
+     renderMain(state.store)
      renderFoter() 
 }
 
+function init(){
+    getItmesFromServer().then(function(pushitemsToState){
+        state.store = pushitemsToState
+        render()
+    })
 
-getItmesFromServer().then(function(pushitemsToState){
-    state.store = pushitemsToState
-})
+}
+
+init()
 
 
-render()
+// render()
