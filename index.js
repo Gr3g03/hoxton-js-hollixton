@@ -86,17 +86,28 @@ function renderMain(){
     mainH2El.textContent = 'Home'
 
     const mainSectionEl = document.createElement('section')
-    const mainUlEl = document.createElement('ul')
-    const mainLiEl = document.createElement('li')
+    mainSectionEl.setAttribute('class', 'product-box')
+
+    const divContainerEl = document.createElement('div')
+    divContainerEl.setAttribute('class', 'products-container')
+
     const mainImgEl = document.createElement('img')
+    mainImgEl.setAttribute('class', 'product-img')
+    mainImgEl.setAttribute('src', '#')
+    mainImgEl.setAttribute('alt', 'product')
+
     const mainH3El = document.createElement('h3')
-    const mainSeconH3El = document.createElement('h3')
-    mainSectionEl.append(mainUlEl)
-    mainUlEl.append(mainLiEl)
-    mainLiEl.append(mainImgEl,mainH3El,mainSeconH3El )
+    mainH3El.setAttribute('class', 'product-name')
+    mainH3El.textContent= 'Product Name'
+    const mainH4El = document.createElement('h4')
+    mainH4El.setAttribute('class','product-price')
+    mainH4El.textContent = 'price'
+  
+    divContainerEl.append(mainImgEl,mainH3El,mainH4El )
+    mainSectionEl.append(divContainerEl)
 
-
-    mainEl.append(mainH2El, mainSectionEl)
+    
+    mainEl.append( mainH2El ,mainSectionEl )
     document.body.append(mainEl)
 
 }
