@@ -112,12 +112,21 @@ function renderMain(){
     mainH3El.setAttribute('class', 'product-name')
     mainH3El.textContent =  items.name
 
+    const spanEL = document.createElement('span')
+    spanEL.setAttribute('class', 'item-prices')
+
     const mainH4El = document.createElement('h4')
     mainH4El.setAttribute('class','product-price')
-    mainH4El.textContent = items.price
+    mainH4El.textContent =`$${items.price}` 
 
+    
+    const discountPrice = document.createElement('h4')
+    discountPrice.setAttribute('class','product-price')
+    discountPrice.textContent =`$${items.discountedPrice}` 
+
+    spanEL.append(mainH4El,discountPrice )
    
-    divContainerEl.append(mainImgEl,mainH3El,mainH4El )
+    divContainerEl.append(mainImgEl,mainH3El,spanEL )
     mainSectionEl.append(divContainerEl)
 }
     mainEl.append( mainH2El ,mainSectionEl )
