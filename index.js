@@ -3,6 +3,13 @@ const state = {
 }
 
 
+function getItmesFromServer(){
+    return fetch('http://localhost:3000/store')
+        .then(function(response){
+    return response.json()
+    })
+    }
+
 function renderHeader(){
     const headerEL = document.createElement('header')
 
@@ -136,6 +143,10 @@ function render(){
      renderFoter() 
 }
 
+
+getItmesFromServer().then(function(pushitemsToState){
+    state.store = pushitemsToState
+})
 
 
 render()
