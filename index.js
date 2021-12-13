@@ -1,5 +1,6 @@
 const state = {
-    store : []
+    store : [],
+    users : [],
 }
 
 
@@ -9,6 +10,28 @@ function getItmesFromServer(){
     return response.json()
     })
     }
+
+function getUsersFromServer(){
+    return fetch('http://localhost:3000/users')
+        .then(function(response){
+    return response.json()
+    })
+}
+
+function getGrilsProductFromServer(){
+   return fetch('http://localhost:3000/store?type=Girls')
+    .then(function(resp){
+    return resp.json()
+})
+
+}
+
+function getGuysProductFromServer(){
+    return fetch('http://localhost:3000/store?type=Guys')
+    .then(function(resp){
+    return resp.json()
+})
+}
 
 function renderHeader(){
     const headerEL = document.createElement('header')
@@ -112,19 +135,34 @@ function renderMain(){
     mainH3El.setAttribute('class', 'product-name')
     mainH3El.textContent =  items.name
 
+  
     const spanEL = document.createElement('span')
     spanEL.setAttribute('class', 'item-prices')
 
+    if(items.hasOwnProperty('discountedPrice')){
+ 
+    const mainH4El = document.createElement('h4')
+    mainH4El.setAttribute('class','product-price')
+    mainH4El.textContent =`$${items.price}` 
+    mainH4El.style.color = 'gray'
+    mainH4El.style.textDecoration = 'line-through'
+    
+    const discountPrice = document.createElement('h4')
+    discountPrice.setAttribute('class','product-price')
+    discountPrice.textContent =`$${items.discountedPrice}`
+    discountPrice.style.color = 'red'
+    
+
+    spanEL.append(mainH4El,discountPrice )
+}else {
     const mainH4El = document.createElement('h4')
     mainH4El.setAttribute('class','product-price')
     mainH4El.textContent =`$${items.price}` 
 
+    spanEL.append(mainH4El)
+}
     
-    const discountPrice = document.createElement('h4')
-    discountPrice.setAttribute('class','product-price')
-    discountPrice.textContent =`$${items.discountedPrice}` 
 
-    spanEL.append(mainH4El,discountPrice )
    
     divContainerEl.append(mainImgEl,mainH3El,spanEL )
     mainSectionEl.append(divContainerEl)
@@ -134,13 +172,6 @@ function renderMain(){
 
     
 }
-
-
-
-
-
-
-
 
 function renderFoter() {
     const footerEl = document.createElement('footer')
@@ -171,6 +202,10 @@ function init(){
     getItmesFromServer().then(function(pushitemsToState){
         state.store = pushitemsToState
         render()
+    })
+
+    getUsersFromServer().then(function(usersFromServer){
+        state.users = usersFromServer
     })
 
 }
