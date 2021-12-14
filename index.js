@@ -1,7 +1,7 @@
 const state = {
     store : [],
     users : [],
-    pages : ''
+    pages : ['home','Girls','Guys','Sale'],
 }
 
 
@@ -19,19 +19,14 @@ function getUsersFromServer(){
     })
 }
 
-function getGrilsProductFromServer(){
-   return fetch('http://localhost:3000/store?type=Girls')
-    .then(function(resp){
-    return resp.json()
-})
+function getGrilsProducts(){
+    state.store.filter(items => items.type === 'Girls')
 
 }
 
-function getGuysProductFromServer(){
-    return fetch('http://localhost:3000/store?type=Guys')
-    .then(function(resp){
-    return resp.json()
-})
+function getGuysProducts(){
+    state.store.filter(items => items.type === 'Guys')
+
 }
 
 function renderHeader(){
@@ -113,18 +108,21 @@ function renderHeader(){
     
 }
 
-function renderMain(){
-   
-    const mainEl = document.createElement('main')
+function newItemTag(items){
+    const daysToConsider = 11
+    const second = 1000
+    const minute = second * 60
+    const hour = minute * 60
+    const day = hour * 24
+  
+    const msForTenDaysAgo = Date.now() - day * daysToConsider
+    const msForProductDate = Date.parse(items.dateEntered)
+    return msForProductDate > msForTenDaysAgo
+}
 
-    const mainH2El = document.createElement('h2')
-    mainH2El.textContent = 'Home'
-    mainH2El.style.color = 'white'
 
-    const mainSectionEl = document.createElement('section')
-    mainSectionEl.setAttribute('class', 'product-box')
 
-    for(const items of state.store){
+function renderGirlsProducts(){
     const divContainerEl = document.createElement('div')
     divContainerEl.setAttribute('class', 'products-container')
     
@@ -141,39 +139,157 @@ function renderMain(){
     mainH3El.setAttribute('class', 'product-name')
     mainH3El.textContent =  items.name
 
-  
+
+//              ---- Price ---
     const spanEL = document.createElement('span')
     spanEL.setAttribute('class', 'item-prices')
 
-    if(items.hasOwnProperty('discountedPrice')){
- 
     const mainH4El = document.createElement('h4')
     mainH4El.setAttribute('class','product-price')
     mainH4El.textContent =`$${items.price}` 
     mainH4El.style.color = 'gray'
     mainH4El.style.textDecoration = 'line-through'
+
+    spanEL.append(mainH4El)
     
+    if(items.discountedPrice){
     const discountPrice = document.createElement('h4')
     discountPrice.setAttribute('class','product-price')
     discountPrice.textContent =`$${items.discountedPrice}`
     discountPrice.style.color = 'red'
-    
+    spanEL.append(discountPrice)
+    }
 
-    spanEL.append(mainH4El,discountPrice )
-}else {
+    aMainEl.append( mainImgEl,mainH3El,spanEL)
+    divContainerEl.append( aMainEl)
+
+    if(newItemTag(items)){
+        const productTag = document.createElement('span') 
+        productTag.setAttribute('class', ('product-tag'))
+        productTag.textContent = 'NEW'
+        divContainerEl.append(productTag)
+    }
+    mainSectionEl.append(divContainerEl)
+}
+
+
+function renderGuysProducts(){
+    const divContainerEl = document.createElement('div')
+    divContainerEl.setAttribute('class', 'products-container')
+    
+    const aMainEl = document.createElement('a')
+    aMainEl.setAttribute('class', 'main-link')
+    aMainEl.setAttribute('href', '#')
+
+    const mainImgEl = document.createElement('img')
+    mainImgEl.setAttribute('class', 'product-img')
+    mainImgEl.setAttribute('src', items.image)
+    mainImgEl.setAttribute('alt', 'product')
+
+    const mainH3El = document.createElement('h3')
+    mainH3El.setAttribute('class', 'product-name')
+    mainH3El.textContent =  items.name
+
+
+//              ---- Price ---
+    const spanEL = document.createElement('span')
+    spanEL.setAttribute('class', 'item-prices')
+
     const mainH4El = document.createElement('h4')
     mainH4El.setAttribute('class','product-price')
     mainH4El.textContent =`$${items.price}` 
+    mainH4El.style.color = 'gray'
+    mainH4El.style.textDecoration = 'line-through'
 
     spanEL.append(mainH4El)
-}
     
+    if(items.discountedPrice){
+    const discountPrice = document.createElement('h4')
+    discountPrice.setAttribute('class','product-price')
+    discountPrice.textContent =`$${items.discountedPrice}`
+    discountPrice.style.color = 'red'
+    spanEL.append(discountPrice)
+    }
 
-    aMainEl.append( mainImgEl,mainH3El )
-    divContainerEl.append( aMainEl,spanEL )
+    aMainEl.append( mainImgEl,mainH3El,spanEL)
+    divContainerEl.append( aMainEl)
+
+    if(newItemTag(items)){
+        const productTag = document.createElement('span') 
+        productTag.setAttribute('class', ('product-tag'))
+        productTag.textContent = 'NEW'
+        divContainerEl.append(productTag)
+    }
+     mainSectionEl.append(divContainerEl)
+}
+
+function renderMainProducts(items,mainSectionEl){
+    const divContainerEl = document.createElement('div')
+    divContainerEl.setAttribute('class', 'products-container')
+    
+    const aMainEl = document.createElement('a')
+    aMainEl.setAttribute('class', 'main-link')
+    aMainEl.setAttribute('href', '#')
+
+    const mainImgEl = document.createElement('img')
+    mainImgEl.setAttribute('class', 'product-img')
+    mainImgEl.setAttribute('src', items.image)
+    mainImgEl.setAttribute('alt', 'product')
+
+    const mainH3El = document.createElement('h3')
+    mainH3El.setAttribute('class', 'product-name')
+    mainH3El.textContent =  items.name
+
+
+//              ---- Price ---
+    const spanEL = document.createElement('span')
+    spanEL.setAttribute('class', 'item-prices')
+
+    const mainH4El = document.createElement('h4')
+    mainH4El.setAttribute('class','product-price')
+    mainH4El.textContent =`$${items.price}` 
+    mainH4El.style.color = 'gray'
+    mainH4El.style.textDecoration = 'line-through'
+
+    spanEL.append(mainH4El)
+    
+    if(items.discountedPrice){
+    const discountPrice = document.createElement('h4')
+    discountPrice.setAttribute('class','product-price')
+    discountPrice.textContent =`$${items.discountedPrice}`
+    discountPrice.style.color = 'red'
+    spanEL.append(discountPrice)
+    }
+
+    aMainEl.append( mainImgEl,mainH3El,spanEL)
+    divContainerEl.append( aMainEl)
+
+    if(newItemTag(items)){
+        const productTag = document.createElement('span') 
+        productTag.setAttribute('class', ('product-tag'))
+        productTag.textContent = 'NEW'
+        divContainerEl.append(productTag)
+    }
     mainSectionEl.append(divContainerEl)
 }
-    mainEl.append( mainH2El ,mainSectionEl )
+
+function renderMain(){
+   
+    const mainEl = document.createElement('main')
+
+    const mainH2El = document.createElement('h2')
+    mainH2El.textContent = 'Home'
+    mainH2El.style.color = 'white'
+
+    const mainSectionEl = document.createElement('section')
+    mainSectionEl.setAttribute('class', 'product-box')
+    mainEl.append( mainH2El ,mainSectionEl)
+
+    for(const items of state.store){
+        renderMainProducts(items,mainSectionEl)
+}
+
+    
     document.body.append(mainEl)
 
     
@@ -200,7 +316,7 @@ function render(){
    
 
      renderHeader ()
-     renderMain(state.store)
+     renderMain()
      renderFoter() 
 }
 
