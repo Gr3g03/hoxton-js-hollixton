@@ -43,6 +43,38 @@ header a {
     color: black;
 }
 
+.modal-wrapper{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background-color: #00000030;
+
+    backdrop-filter: blur(2px);
+
+    place-items: center;
+    display: grid;
+}
+
+.btn-wrapper{
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    position: relative;
+}
+
+.modal-close-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+  
+    background: none;
+    border: none;
+    padding: 0.3rem;
+}
+
 
 main{
     width: 100%;

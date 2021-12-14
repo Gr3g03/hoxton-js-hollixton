@@ -100,9 +100,14 @@ function renderHeader() {
 
     const searchLiEL = document.createElement('li')
     searchLiEL.setAttribute('class', 'right-Header-list-item')
+
     const searbuttonhAEL = document.createElement('button')
     const searchimgEL = document.createElement('img')
     searchimgEL.setAttribute('src', './assets/search.svg')
+    searbuttonhAEL.addEventListener('click', function buttons() {
+        state.modal = 'search'
+        renderSearchBtn(searbuttonhAEL)
+    })
     searbuttonhAEL.append(searchimgEL)
     searchLiEL.append(searbuttonhAEL)
 
@@ -111,6 +116,10 @@ function renderHeader() {
     const loginButtonEl = document.createElement('button')
     const loginimgEL = document.createElement('img')
     loginimgEL.setAttribute('src', './assets/login_person.svg')
+    loginLiEl.addEventListener('click', function buttons() {
+        state.modal = 'login'
+        renderLoginBtn(loginButtonEl)
+    })
 
     loginButtonEl.append(loginimgEL)
     loginLiEl.append(loginButtonEl)
@@ -120,6 +129,10 @@ function renderHeader() {
     const cartButtonEl = document.createElement('button')
     const cartimgEL = document.createElement('img')
     cartimgEL.setAttribute('src', './assets/cart.svg')
+    cartimgEL.addEventListener('click', function buttons() {
+        state.modal = 'cart'
+        renderCartBtn(cartButtonEl)
+    })
     cartButtonEl.append(cartimgEL)
     cartLiEl.append(cartButtonEl)
 
@@ -128,9 +141,105 @@ function renderHeader() {
     headerEL.append(headerNavEl, rightHeaderSectionEl)
     document.body.append(headerEL)
 
-    headerEL.innerhtml = ''
+}
 
+function renderSearchBtn() {
 
+    const searchBtnWrapper = document.createElement('div')
+    searchBtnWrapper.setAttribute('class', 'modal-wrapper')
+    searchBtnWrapper.addEventListener('click', function () {
+        state.modal = ''
+        render()
+    })
+
+    const btnwrapper = document.createElement('div')
+    btnwrapper.setAttribute('class', 'btn-wrapper')
+    btnwrapper.addEventListener('click', function (event) {
+        event.stopPropagation()
+    })
+
+    const closeModal = document.createElement('button')
+    closeModal.setAttribute('class', 'modal-close-btn')
+    closeModal.textContent = 'X'
+    closeModal.addEventListener('click', function btn() {
+        state.modal = ''
+        render()
+    })
+
+    const titleEL = document.createElement('h2')
+    titleEL.textContent = 'search'
+
+    btnwrapper.append(closeModal, titleEL)
+    searchBtnWrapper.append(btnwrapper)
+    document.body.append(searchBtnWrapper)
+
+}
+
+function renderLoginBtn() {
+    const searchBtnWrapper = document.createElement('div')
+    searchBtnWrapper.setAttribute('class', 'modal-wrapper')
+    searchBtnWrapper.addEventListener('click', function () {
+        state.modal = ''
+        render()
+    })
+
+    const btnwrapper = document.createElement('div')
+    btnwrapper.setAttribute('class', 'btn-wrapper')
+    btnwrapper.addEventListener('click', function (event) {
+        event.stopPropagation()
+    })
+
+    const closeModal = document.createElement('button')
+    closeModal.setAttribute('class', 'modal-close-btn')
+    closeModal.textContent = 'X'
+    closeModal.addEventListener('click', function btn() {
+        state.modal = ''
+        render()
+    })
+
+    const titleEL = document.createElement('h2')
+    titleEL.textContent = 'login'
+
+    btnwrapper.append(closeModal, titleEL)
+    searchBtnWrapper.append(btnwrapper)
+    document.body.append(searchBtnWrapper)
+}
+
+function renderCartBtn() {
+    const searchBtnWrapper = document.createElement('div')
+    searchBtnWrapper.setAttribute('class', 'modal-wrapper')
+    searchBtnWrapper.addEventListener('click', function () {
+        state.modal = ''
+        render()
+    })
+
+    const btnwrapper = document.createElement('div')
+    btnwrapper.setAttribute('class', 'btn-wrapper')
+    btnwrapper.addEventListener('click', function (event) {
+        event.stopPropagation()
+    })
+
+    const closeModal = document.createElement('button')
+    closeModal.setAttribute('class', 'modal-close-btn')
+    closeModal.textContent = 'X'
+    closeModal.addEventListener('click', function btn() {
+        state.modal = ''
+        render()
+    })
+
+    const titleEL = document.createElement('h2')
+    titleEL.textContent = 'cart'
+
+    btnwrapper.append(closeModal, titleEL)
+    searchBtnWrapper.append(btnwrapper)
+    document.body.append(searchBtnWrapper)
+}
+
+function renderButtons() {
+    if (state.modal === '') return
+    if (state.modal === 'search') renderSearchBtn()
+    if (state.modal === 'login') renderLoginBtn()
+    if (state.modal === 'cart') renderCartBtn()
 }
 
 function newItemTag(items) {
@@ -254,6 +363,7 @@ function render() {
     renderHeader()
     renderMain()
     renderFoter()
+    // renderButtons()
 }
 
 function init() {
