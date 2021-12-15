@@ -3,7 +3,8 @@ const state = {
     users: [],
     pages: ['home', 'Girls', 'Guys', 'Sale'],
     selectedPage: '',
-    modal: ''
+    modal: '',
+    selectedProduct: null
 }
 
 
@@ -43,6 +44,7 @@ function renderHeader() {
     headerH1El.textContent = 'Hollixton'
     headerH1El.addEventListener('click', function data() {
         state.selectedPage = 'home'
+        state.selectedProduct = null
         render()
     })
 
@@ -57,6 +59,7 @@ function renderHeader() {
     const girlsALiEl = document.createElement('a')
     girlsALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Girls'
+        state.selectedProduct = null
         render()
     })
 
@@ -69,6 +72,7 @@ function renderHeader() {
     const gusyALiEl = document.createElement('a')
     gusyALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Guys'
+        state.selectedProduct = null
         render()
     })
     gusyALiEl.setAttribute('href', '#')
@@ -80,6 +84,7 @@ function renderHeader() {
     const saleALiEl = document.createElement('a')
     saleALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Sale'
+        state.selectedProduct = null
         render()
     })
 
@@ -259,6 +264,11 @@ function renderMainProducts(items, mainSectionEl) {
     const divContainerEl = document.createElement('div')
     divContainerEl.setAttribute('class', 'products-container')
 
+    divContainerEl.addEventListener('click', function () {
+        state.selectedProduct = items
+        render()
+    })
+
     const aMainEl = document.createElement('a')
     aMainEl.setAttribute('class', 'main-link')
     aMainEl.setAttribute('href', '#')
@@ -305,8 +315,40 @@ function renderMainProducts(items, mainSectionEl) {
     mainSectionEl.append(divContainerEl)
 }
 
-function renderMain() {
+function getProductItemToDisplay(mainEl) {
+    const productContainer = document.createElement('section')
+    productContainer.setAttribute('class', ' product-container')
 
+    const productDetails = document.createElement('div')
+    productDetails.setAttribute('class', 'product-details')
+
+    const productImg = document.createElement('img')
+    productImg.setAttribute('class', 'product__img')
+    productImg.setAttribute('src', state.selectedProduct.image)
+    productImg.setAttribute('alt', state.selectedProduct.name)
+
+    const productDescription = document.createElement('div')
+    productDescription.setAttribute('class', 'product-description')
+
+    const productName = document.createElement('h2')
+    productName.setAttribute('class', 'product-name')
+    productName.textContent = state.selectedProduct.name
+
+    const addToBagBtn = document.createElement('button')
+    addToBagBtn.setAttribute('class', 'add-to-bag-product')
+    addToBagBtn.textContent = 'ADD TO BAG'
+    addToBagBtn.addEventListener('click', function () {
+        state.selectedItem = null
+        render()
+    })
+    productDetails.append(productImg)
+    productDescription.append(productName, addToBagBtn)
+    productContainer.append(productDetails, productDescription)
+
+    mainEl.append(productContainer)
+}
+
+function renderMain() {
 
     const mainEl = document.createElement('main')
 
@@ -316,31 +358,34 @@ function renderMain() {
 
     const mainSectionEl = document.createElement('section')
     mainSectionEl.setAttribute('class', 'product-box')
-    mainEl.append(mainH2El, mainSectionEl)
 
-    if (state.selectedPage === 'Sale') {
-        for (const items of getSaleProducts()) {
-            renderMainProducts(items, mainSectionEl)
-        }
+    if (state.selectedProduct !== null) {
+        getProductItemToDisplay(mainEl)
     }
-    else if (state.selectedPage === 'Girls') {
-        for (const items of getGirlsProducts()) {
-            renderMainProducts(items, mainSectionEl)
-        }
-    }
-    else if (state.selectedPage === 'Guys') {
-        for (const items of getGuysProducts()) {
-            renderMainProducts(items, mainSectionEl)
-        }
-    }
-
     else {
-        for (const items of state.store) {
-            renderMainProducts(items, mainSectionEl)
+        if (state.selectedPage === 'Sale') {
+            for (const items of getSaleProducts()) {
+                renderMainProducts(items, mainSectionEl)
+            }
         }
+        else if (state.selectedPage === 'Girls') {
+            for (const items of getGirlsProducts()) {
+                renderMainProducts(items, mainSectionEl)
+            }
+        }
+        else if (state.selectedPage === 'Guys') {
+            for (const items of getGuysProducts()) {
+                renderMainProducts(items, mainSectionEl)
+            }
+        }
+
+        else {
+            for (const items of state.store) {
+                renderMainProducts(items, mainSectionEl)
+            }
+        }
+        mainEl.append(mainH2El, mainSectionEl)
     }
-
-
     document.body.append(mainEl)
 }
 
@@ -363,7 +408,7 @@ function render() {
     renderHeader()
     renderMain()
     renderFoter()
-    // renderButtons()
+    renderButtons()
 }
 
 function init() {
