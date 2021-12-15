@@ -1,10 +1,11 @@
 const state = {
     store: [],
-    users: [],
+    users: null,
     pages: ['home', 'Girls', 'Guys', 'Sale'],
     selectedPage: '',
     modal: '',
-    selectedProduct: null
+    selectedProduct: null,
+    search: ''
 }
 
 
@@ -34,6 +35,7 @@ function getSaleProducts() {
 
 function getGuysProducts() {
     return state.store.filter(items => items.type === 'Guys')
+
 
 }
 
@@ -107,6 +109,7 @@ function renderHeader() {
     searchLiEL.setAttribute('class', 'right-Header-list-item')
 
     const searbuttonhAEL = document.createElement('button')
+    searbuttonhAEL.setAttribute('class', 'header-buttons')
     const searchimgEL = document.createElement('img')
     searchimgEL.setAttribute('src', './assets/search.svg')
     searbuttonhAEL.addEventListener('click', function buttons() {
@@ -119,6 +122,7 @@ function renderHeader() {
     const loginLiEl = document.createElement('li')
     loginLiEl.setAttribute('class', 'right-Header-list-item')
     const loginButtonEl = document.createElement('button')
+    loginButtonEl.setAttribute('class', 'header-buttons')
     const loginimgEL = document.createElement('img')
     loginimgEL.setAttribute('src', './assets/login_person.svg')
     loginLiEl.addEventListener('click', function buttons() {
@@ -132,6 +136,7 @@ function renderHeader() {
     const cartLiEl = document.createElement('li')
     cartLiEl.setAttribute('class', 'right-Header-list-item')
     const cartButtonEl = document.createElement('button')
+    cartButtonEl.setAttribute('class', 'header-buttons')
     const cartimgEL = document.createElement('img')
     cartimgEL.setAttribute('src', './assets/cart.svg')
     cartimgEL.addEventListener('click', function buttons() {
@@ -170,11 +175,32 @@ function renderSearchBtn() {
         state.modal = ''
         render()
     })
+    const searchBtnForm = document.createElement('form')
+    searchBtnForm.setAttribute('class', 'search-btn-form')
+    searchBtnForm.addEventListener('submit', function (event) {
+        event.preventDefault()
+
+        state.search = searchBtnForm.search.value
+        render()
+    })
+
+    const searchBtnLabel = document.createElement('label')
+    searchBtnLabel.setAttribute('for', 'search-btn-input')
+
+    const buttonInput = document.createElement('input')
+    buttonInput.setAttribute('class', 'search-btn-input')
+    buttonInput.setAttribute('type', 'text')
+    buttonInput.setAttribute('name', 'search')
+    // buttonInput.setAttribute('placeholder', 'Search')
+
+    searchBtnLabel.append(buttonInput)
+
+    searchBtnForm.append(searchBtnLabel)
 
     const titleEL = document.createElement('h2')
-    titleEL.textContent = 'search'
+    titleEL.textContent = 'search for your favourite items!'
 
-    btnwrapper.append(closeModal, titleEL)
+    btnwrapper.append(closeModal, titleEL, searchBtnForm)
     searchBtnWrapper.append(btnwrapper)
     document.body.append(searchBtnWrapper)
 
@@ -202,10 +228,51 @@ function renderLoginBtn() {
         render()
     })
 
+    const signInForm = document.createElement('form')
+    signInForm.setAttribute('class', 'signin-form')
+    signInForm.addEventListener('submit', function (event) {
+        event.preventDefault()
+        // searchBtnForm.reset
+    })
+
+    const emailLabel = document.createElement('label')
+    emailLabel.setAttribute('name', 'emailinput')
+    const pel = document.createElement('p')
+    pel.textContent = 'Email'
+
+    const emailInput = document.createElement('input')
+    emailInput.setAttribute('class', 'email-input')
+    emailInput.setAttribute('type', 'email')
+    emailInput.setAttribute('name', 'emailinput')
+
+    emailLabel.append(pel, emailInput)
+
+    const passwordLabel = document.createElement('label')
+    passwordLabel.setAttribute('name', 'passwbutton')
+    const p2el = document.createElement('p')
+    p2el.textContent = 'Password'
+
+    const passwordInput = document.createElement('input')
+    passwordInput.setAttribute('class', 'password-input')
+    passwordInput.setAttribute('type', 'password')
+    passwordInput.setAttribute('name', 'passwbutton')
+
+    passwordLabel.append(p2el, passwordInput)
+
+    const signInBtnLabel = document.createElement('label')
+
+    const signInBtn = document.createElement('button')
+    signInBtn.textContent = 'SIGN IN'
+    signInBtn.setAttribute('class', 'signin-button')
+
+    signInBtnLabel.append(signInBtn)
+
     const titleEL = document.createElement('h2')
     titleEL.textContent = 'login'
 
-    btnwrapper.append(closeModal, titleEL)
+    signInForm.append(emailLabel, passwordLabel, signInBtnLabel)
+
+    btnwrapper.append(closeModal, titleEL, signInForm)
     searchBtnWrapper.append(btnwrapper)
     document.body.append(searchBtnWrapper)
 }
@@ -258,6 +325,7 @@ function newItemTag(items) {
     const msForProductDate = Date.parse(items.dateEntered)
     return msForProductDate > msForTenDaysAgo
 }
+
 
 
 function renderMainProducts(items, mainSectionEl) {
@@ -313,6 +381,7 @@ function renderMainProducts(items, mainSectionEl) {
         divContainerEl.append(productTag)
     }
     mainSectionEl.append(divContainerEl)
+
 }
 
 function getProductItemToDisplay(mainEl) {
@@ -345,7 +414,20 @@ function getProductItemToDisplay(mainEl) {
     productDescription.append(productName, addToBagBtn)
     productContainer.append(productDetails, productDescription)
 
+
+
+
     mainEl.append(productContainer)
+}
+
+
+function filterSearchedElements() {
+    if (state.search !== '') {
+        let productsToDisplay = state.store
+        productsToDisplay = productsToDisplay.filter(products => {
+            return products.name.toLowerCase().includes(state.search.toLowerCase())
+        })
+    }
 }
 
 function renderMain() {
@@ -363,30 +445,38 @@ function renderMain() {
         getProductItemToDisplay(mainEl)
     }
     else {
+
         if (state.selectedPage === 'Sale') {
             for (const items of getSaleProducts()) {
                 renderMainProducts(items, mainSectionEl)
+                // filterSearchedElements()
             }
         }
         else if (state.selectedPage === 'Girls') {
             for (const items of getGirlsProducts()) {
                 renderMainProducts(items, mainSectionEl)
+                // filterSearchedElements()
             }
         }
         else if (state.selectedPage === 'Guys') {
             for (const items of getGuysProducts()) {
                 renderMainProducts(items, mainSectionEl)
+                // filterSearchedElements()
             }
         }
 
         else {
             for (const items of state.store) {
                 renderMainProducts(items, mainSectionEl)
+                // filterSearchedElements()
             }
         }
         mainEl.append(mainH2El, mainSectionEl)
+
+
     }
     document.body.append(mainEl)
+
 }
 
 function renderFoter() {
@@ -409,6 +499,7 @@ function render() {
     renderMain()
     renderFoter()
     renderButtons()
+    // filterSearchedElements()
 }
 
 function init() {
