@@ -237,7 +237,7 @@ function renderLoginBtn() {
     signInForm.addEventListener('submit', function (event) {
         event.preventDefault()
 
-        loginUser()
+        loginUser(emailInput.value, passwordLabel.value)
 
     })
 
@@ -437,21 +437,22 @@ function filterSearchedElements() {
     }
 }
 
-// function loginUser() {
-//     for (const user of state.users) {
+function loginUser() {
+    for (const user of state.users) {
 
-//         let username = user.id
-//         let password = user.password
+        let username = user.id
+        let password = user.password
 
-//         if (username === user.id && password === user.password)
-//             // {
-//             alert('welcome')
-//         // } else {
-//         //     alert('please try again')
-//         // }
+        if (username === user.id && password === user.password) {
+            alert('welcome')
+            state.users = user
+            render
+        } else {
+            alert('please try again')
+        }
 
-//     }
-// }
+    }
+}
 
 
 function renderMain() {
