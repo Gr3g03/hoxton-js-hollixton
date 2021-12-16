@@ -24,6 +24,7 @@ function getUsersFromServer() {
 }
 
 function getGirlsProducts() {
+
     return state.store.filter(items => items.type === 'Girls')
 
 }
@@ -47,6 +48,7 @@ function renderHeader() {
     headerH1El.addEventListener('click', function data() {
         state.selectedPage = 'home'
         state.selectedProduct = null
+        state.search = ''
         render()
     })
 
@@ -62,6 +64,7 @@ function renderHeader() {
     girlsALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Girls'
         state.selectedProduct = null
+        state.search = ''
         render()
     })
 
@@ -75,6 +78,7 @@ function renderHeader() {
     gusyALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Guys'
         state.selectedProduct = null
+        state.search = ''
         render()
     })
     gusyALiEl.setAttribute('href', '#')
@@ -87,6 +91,7 @@ function renderHeader() {
     saleALiEl.addEventListener('click', function data() {
         state.selectedPage = 'Sale'
         state.selectedProduct = null
+        state.search = ''
         render()
     })
 
@@ -179,7 +184,6 @@ function renderSearchBtn() {
     searchBtnForm.setAttribute('class', 'search-btn-form')
     searchBtnForm.addEventListener('submit', function (event) {
         event.preventDefault()
-
         state.search = searchBtnForm.search.value
         render()
     })
@@ -232,7 +236,9 @@ function renderLoginBtn() {
     signInForm.setAttribute('class', 'signin-form')
     signInForm.addEventListener('submit', function (event) {
         event.preventDefault()
-        // searchBtnForm.reset
+
+        loginUser()
+
     })
 
     const emailLabel = document.createElement('label')
@@ -269,6 +275,7 @@ function renderLoginBtn() {
 
     const titleEL = document.createElement('h2')
     titleEL.textContent = 'login'
+
 
     signInForm.append(emailLabel, passwordLabel, signInBtnLabel)
 
@@ -430,6 +437,23 @@ function filterSearchedElements() {
     }
 }
 
+// function loginUser() {
+//     for (const user of state.users) {
+
+//         let username = user.id
+//         let password = user.password
+
+//         if (username === user.id && password === user.password)
+//             // {
+//             alert('welcome')
+//         // } else {
+//         //     alert('please try again')
+//         // }
+
+//     }
+// }
+
+
 function renderMain() {
 
     const mainEl = document.createElement('main')
@@ -445,11 +469,10 @@ function renderMain() {
         getProductItemToDisplay(mainEl)
     }
     else {
-
         if (state.selectedPage === 'Sale') {
             for (const items of getSaleProducts()) {
+                filterSearchedElements()
                 renderMainProducts(items, mainSectionEl)
-                // filterSearchedElements()
             }
         }
         else if (state.selectedPage === 'Girls') {
@@ -499,7 +522,7 @@ function render() {
     renderMain()
     renderFoter()
     renderButtons()
-    // filterSearchedElements()
+    filterSearchedElements()
 }
 
 function init() {
